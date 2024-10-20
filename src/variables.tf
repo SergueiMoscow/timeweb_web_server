@@ -20,3 +20,7 @@ variable "vault_address" {
 variable "vault_token" {
   type = string
 }
+
+variable "vault_tw_token_path" {
+  type = string
+}

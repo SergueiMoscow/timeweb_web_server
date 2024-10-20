@@ -1,0 +1,13 @@
+# Вариант 1 для токена
+tw_token            = "<timeweb_token>"
+
+# Вариант 2 для токена
+vault_address       = "http://192.168.1.1:8200"
+vault_token         = "<vault_token>"
+vault_tw_token_path = "secret/tw_token"
+
+# =======================
+vms_ssh_user        = "ivan"
+ssh_public_key_file = "~/.ssh/id_rsa.pub"
+server_name         = "my-web-server"
+

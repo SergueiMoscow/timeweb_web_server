@@ -18,13 +18,14 @@ terraform {
 }
 
 provider "twc" {
-  token = var.tw_token
+  # token = var.tw_token
+  token = data.vault_generic_secret.tw_token.data.timeweb-token
+
 }
 
 provider "vault" {
   address         = var.vault_address
   skip_tls_verify = true
-  token           = "education"
-  # checkov:skip=CKV_SECRET_6: education
+  token           = var.vault_token
 }
 
