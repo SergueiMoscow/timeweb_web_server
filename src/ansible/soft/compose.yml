@@ -31,7 +31,8 @@ services:
   portainer:
     image: portainer/portainer-ce:2.0.0
     container_name: portainer
-    command: -H unix:///var/run/docker.sock
+    # password: changeme
+    command: --admin-password='$$2y$$05$$YEzn/Y..HER.9EYB8XddtuBUH/gHkfsdYXGQqNHTjStGbIbLBtr1y' -H unix:///var/run/docker.sock
     restart: always
     networks:
       - proxy
@@ -39,7 +40,7 @@ services:
       - VIRTUAL_HOST=portainer.yourdomain.com
       - VIRTUAL_PORT=9000
     ports:
-      - 8000:8000
+      - 9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data

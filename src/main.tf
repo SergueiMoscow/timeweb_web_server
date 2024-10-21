@@ -51,6 +51,7 @@ resource "local_file" "playbook_templatefile" {
   content = templatefile("${path.module}/ansible/playbook.tftpl",
     {
       user = var.vms_ssh_user
+      hostname = var.server_name
     }
   )
   filename = "${abspath(path.module)}/ansible/playbook.yml"

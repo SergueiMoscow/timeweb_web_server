@@ -24,3 +24,7 @@ variable "vault_token" {
 variable "vault_tw_token_path" {
   type = string
 }
+
+variable "portainer_admin_password_hash" {
+  type = string
+}
