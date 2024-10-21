@@ -21,18 +21,6 @@ resource "twc_server" "this" {
   os_id      = data.twc_os.ubuntu.id
   preset_id  = data.twc_presets.this.id
   cloud_init = data.template_file.cloudinit.rendered
-
-  # provisioner "file" {
-  #   source      = "soft/compose.yml"
-  #   destination = "/etc/init_soft/compose.yml"
-
-  #   connection {
-  #     type     = "ssh"
-  #     host     = twc_server.twc_floating_ip.ip
-  #     user     = "sergey" # измените на правильного пользователя
-  #     private_key = file(var.ssh_public_key_file)
-  #   }
-  # }  
 }
 
 resource "twc_ssh_key" "key" {
@@ -57,4 +45,13 @@ resource "local_file" "hosts_templatefile" {
     }
   )
   filename = "${abspath(path.module)}/ansible/hosts.ini"
+}
+
+resource "local_file" "playbook_templatefile" {
+  content = templatefile("${path.module}/ansible/playbook.tftpl",
+    {
+      user = var.vms_ssh_user
+    }
+  )
+  filename = "${abspath(path.module)}/ansible/playbook.yml"
 }

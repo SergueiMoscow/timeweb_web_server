@@ -1,0 +1,28 @@
+---
+- name: Deploy Docker Compose application
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Copy docker-compose file to server
+    - name: Ensure the target directory exists
+      ansible.builtin.file:
+        path: /home/${user}/soft
+        state: directory
+        owner: ${user}
+        group: ${user}
+        mode: '0755'
+
+      ansible.builtin.copy:
+        src: soft/compose.yml
+        dest: /home/${user}/soft/compose.yml
+        owner: ${user}
+        group: ${user}
+        mode: '0644'
+
+    - name: Change to directory containing docker-compose file
+      ansible.builtin.shell:
+        cmd: docker compose up -d
+        chdir: /home/${user}/soft
+
+      args:
+        executable: /bin/bash
