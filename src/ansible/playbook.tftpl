@@ -26,10 +26,14 @@
         group: ${user}
         mode: '0644'
 
-    - name: Change to directory containing docker-compose file
+    - name: Starting containers from docker-compose
       ansible.builtin.shell:
-        cmd: docker compose up -d
         chdir: /home/${user}/soft
+        cmd: docker compose up -d
 
-      args:
-        executable: /bin/bash
+    - name: Starting container with gitlab-runner
+      command: >
+        docker run -d --name gitlab-runner --restart always
+        -v /srv/gitlab-runner/config:/etc/gitlab-runner
+        -v /var/run/docker.sock:/var/run/docker.sock
+        gitlab/gitlab-runner:alpine

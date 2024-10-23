@@ -31,3 +31,25 @@
 - portainer: `http://<ip>:9000`
 - nginx: `http://<ip>81` Login `admin@example.com`, password `changeme`.
 
+#### gitlab-runner register:
+```
+docker run --rm -it \
+  -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+  gitlab/gitlab-runner:alpine register \
+  --non-interactive \
+  --url "<CI_SERVER_URL>" \
+  --token "<REGISTRATION_TOKEN>" \
+  --executor "docker" \
+  --description "Tag-Only Runner" \
+  --docker-image "docker:dind" \
+  --tag-list "stage"
+```
+#### Заменить в /var/gitlab-runner/config/congig.toml
+строку:
+```
+    volumes = ["/cache"]
+```
+на
+```
+    volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
+```
