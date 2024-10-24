@@ -37,3 +37,74 @@
         -v /srv/gitlab-runner/config:/etc/gitlab-runner
         -v /var/run/docker.sock:/var/run/docker.sock
         gitlab/gitlab-runner:alpine
+
+    - name: Wait for Nginx Proxy Manager to be up and running
+      wait_for:
+        host: "localhost"
+        port: 81
+        state: started
+        delay: 10
+        timeout: 300
+
+    - name: Obtain authentication token
+      ansible.builtin.uri:
+        url: "http://${ip}:81/api/tokens"
+        method: POST
+        body_format: json
+        body:
+          identity: "admin@example.com"
+          secret: "changeme"
+        headers:
+          Content-Type: "application/json"
+        return_content: yes
+      register: auth_token_response
+
+    - name: Create an additional proxy host https
+      ansible.builtin.uri:
+        url: "http://${ip}:81/api/nginx/proxy-hosts"
+        method: POST
+        body_format: json
+        body:
+          domain_names:
+            - "${nginx_config.host}"
+          forward_scheme: "https"
+          forward_host: "${nginx_config.forward_host}"
+          forward_port: ${nginx_config.forward_port}
+          access_list_id: 0
+          certificate_id: 0
+          ssl_forced: false
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ auth_token_response.json.token }}"
+        status_code: 201  
+
+
+    - name: Change admin user name and password
+      ansible.builtin.uri:
+        url: "http://${ip}:81/api/users/1/auth"
+        method: PUT
+        body_format: json
+        body:
+          type: "password"
+          secret: "${nginx_config.new_password}"
+          current: "changeme"
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ auth_token_response.json.token }}"
+        status_code: 201
+
+    - name: Update user details
+      ansible.builtin.uri:
+        url: "http://${ip}:81/api/users/1"
+        method: PUT
+        body_format: json
+        body:
+          name: "${nginx_config.new_username}"
+          nickname: "${nginx_config.new_nickname}"
+          email: "${nginx_config.new_email}"
+          roles: ["admin"]
+          is_disabled: false
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ auth_token_response.json.token }}"
+        status_code: 200

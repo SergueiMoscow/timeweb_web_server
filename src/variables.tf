@@ -28,3 +28,19 @@ variable "vault_tw_token_path" {
 variable "portainer_admin_password_hash" {
   type = string
 }
+
+variable "nginx_config" {
+  description = "Nginx configuration details"
+  type = object({
+    host             = string
+    forward_host     = string
+    forward_port     = number
+    current_email    = string
+    current_password = string
+    new_email        = string
+    new_password     = string
+    new_username     = string
+    new_nickname     = string
+
+  })
+}

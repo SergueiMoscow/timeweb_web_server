@@ -39,3 +39,7 @@ terraform.rc
 # Generated files for Andible
 hosts.ini
 playbook.yml
+nginx-api.json
+nginx.yml
+run_nginx.sh
+hosts.ini

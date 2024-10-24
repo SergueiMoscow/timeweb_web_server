@@ -50,8 +50,10 @@ resource "local_file" "hosts_templatefile" {
 resource "local_file" "playbook_templatefile" {
   content = templatefile("${path.module}/ansible/playbook.tftpl",
     {
-      user = var.vms_ssh_user
-      hostname = var.server_name
+      user         = var.vms_ssh_user
+      hostname     = var.server_name
+      nginx_config = var.nginx_config
+      ip           = twc_server_ip.ipv4.ip
     }
   )
   filename = "${abspath(path.module)}/ansible/playbook.yml"

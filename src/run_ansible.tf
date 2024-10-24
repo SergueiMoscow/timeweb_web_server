@@ -1,5 +1,5 @@
 resource "null_resource" "run_ansible" {
-  depends_on = [twc_server.this]  # Зависимость от созданного сервера
+  depends_on = [twc_server.this] # Зависимость от созданного сервера
 
   provisioner "local-exec" {
     command = <<EOT
@@ -9,6 +9,6 @@ resource "null_resource" "run_ansible" {
   }
 
   triggers = {
-    ipv4 = twc_server_ip.ipv4.ip  # Использует IP сервера в качестве триггера
+    ipv4 = twc_server_ip.ipv4.ip # Использует IP сервера в качестве триггера
   }
 }
