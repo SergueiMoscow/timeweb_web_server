@@ -72,7 +72,7 @@
         body_format: json
         body:
           domain_names:
-            - "${nginx_config.host}"
+            - "${nginx_host}"
           forward_scheme: "https"
           forward_host: "${nginx_config.forward_host}"
           forward_port: ${nginx_config.forward_port}

@@ -37,8 +37,8 @@ override.tf.json
 terraform.rc
 
 # Generated files for Ansible
-hosts.ini
-playbook.yml
+playbook-*.yml
 nginx-api.json
 nginx.yml
 run_nginx.sh
+hosts-*.ini

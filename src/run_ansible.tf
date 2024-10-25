@@ -5,7 +5,7 @@ resource "null_resource" "run_ansible" {
     command = <<EOT
       sleep 60  # Задержка, чтобы дождаться окончания cloud-init
       bash ${path.module}/check_ssh.sh ${twc_server_ip.ipv4.ip}
-      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ${path.module}/ansible/hosts.ini ${path.module}/ansible/playbook.yml
+      ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ${local.hosts_ini_file} ${local.playbook_file}
     EOT
   }
 

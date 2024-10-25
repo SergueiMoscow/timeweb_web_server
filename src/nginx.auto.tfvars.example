@@ -1,5 +1,6 @@
 nginx_config = {
-  host         = "<your_host>"
+  stage-host   = "<your_host>"
+  prod-host    = "<your_prod_host>"
   forward_host = "<service_name_from_compose.yml>"
   forward_port = <port>
   new_email    = "<your_email>"

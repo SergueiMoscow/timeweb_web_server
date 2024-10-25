@@ -16,7 +16,7 @@ resource "twc_server_ip" "ipv4" {
 }
 
 resource "twc_server" "this" {
-  name       = var.server_name
+  name       = terraform.workspace == "prod" ? var.prod_server_name : var.stage_server_name
   comment    = "Managed by terraform"
   os_id      = data.twc_os.ubuntu.id
   preset_id  = data.twc_presets.this.id
@@ -44,17 +44,17 @@ resource "local_file" "hosts_templatefile" {
       ipv4 = twc_server_ip.ipv4.ip
     }
   )
-  filename = "${abspath(path.module)}/ansible/hosts.ini"
+  filename = "${local.hosts_ini_file}"
 }
 
 resource "local_file" "playbook_templatefile" {
   content = templatefile("${path.module}/ansible/playbook.tftpl",
     {
       user         = var.vms_ssh_user
-      hostname     = var.server_name
+      nginx_host   = local.nginx_host
       nginx_config = var.nginx_config
       ip           = twc_server_ip.ipv4.ip
     }
   )
-  filename = "${abspath(path.module)}/ansible/playbook.yml"
+  filename = "${local.playbook_file}"
 }

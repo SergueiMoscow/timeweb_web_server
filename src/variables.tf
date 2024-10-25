@@ -1,4 +1,7 @@
-variable "server_name" {
+variable "stage_server_name" {
+  type = string
+}
+variable "prod_server_name" {
   type = string
 }
 variable "tw_token" {
@@ -32,7 +35,8 @@ variable "portainer_admin_password_hash" {
 variable "nginx_config" {
   description = "Nginx configuration details"
   type = object({
-    host             = string
+    stage_host       = string
+    prod_host        = string
     forward_host     = string
     forward_port     = number
     current_email    = string
@@ -43,4 +47,10 @@ variable "nginx_config" {
     new_nickname     = string
     advanced_config  = string
   })
+}
+
+locals {
+  hosts_ini_file = "${abspath(path.module)}/ansible/hosts-${terraform.workspace}.ini"
+  playbook_file = "${abspath(path.module)}/ansible/playbook-${terraform.workspace}.yml"
+  nginx_host = terraform.workspace == "prod" ? var.nginx_config.prod_host : var.nginx_config.stage_host
 }
