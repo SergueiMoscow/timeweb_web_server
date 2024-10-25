@@ -6,9 +6,11 @@
     - name: Wait for SSH to become available
       ansible.builtin.wait_for:
         port: 22
+        state: started
+        search_regex: OpenSSH
         host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
         delay: 10
-        timeout: 1200
+        timeout: 2400
 
     - name: Ensure the target directory exists
       ansible.builtin.file:
@@ -17,6 +19,10 @@
         owner: ${user}
         group: ${user}
         mode: '0755'
+
+    - name: Create shared-net network if it does not exist
+      ansible.builtin.shell: >
+        docker network inspect shared-net > /dev/null 2>&1 || docker network create shared-net
 
     - name: Copy docker-compose file to server
       ansible.builtin.copy:
@@ -73,6 +79,7 @@
           access_list_id: 0
           certificate_id: 0
           ssl_forced: false
+          advanced_config: ${nginx_config.advanced_config}
         headers:
           Content-Type: "application/json"
           Authorization: "Bearer {{ auth_token_response.json.token }}"

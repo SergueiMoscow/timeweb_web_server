@@ -41,6 +41,6 @@ variable "nginx_config" {
     new_password     = string
     new_username     = string
     new_nickname     = string
-
+    advanced_config  = string
   })
 }

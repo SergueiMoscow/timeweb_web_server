@@ -31,7 +31,9 @@
 - portainer: `http://<ip>:9000`
 - nginx: `http://<ip>81` Login `admin@example.com`, password `changeme`.
 
-#### gitlab-runner register:
+### После отработки `terraform apply`
+
+#### Создать runner в gitlab и на созданном сервере запустить gitlab-runner register:
 ```
 docker run --rm -it \
   -v /srv/gitlab-runner/config:/etc/gitlab-runner \
@@ -41,8 +43,7 @@ docker run --rm -it \
   --token "<REGISTRATION_TOKEN>" \
   --executor "docker" \
   --description "Tag-Only Runner" \
-  --docker-image "docker:dind" \
-  --tag-list "stage"
+  --docker-image "docker:dind"
 ```
 #### Заменить в /var/gitlab-runner/config/congig.toml
 строку:
@@ -53,3 +54,8 @@ docker run --rm -it \
 ```
     volumes = ["/var/run/docker.sock:/var/run/docker.sock", "/cache"]
 ```
+
+#### Завершение настройки при необходимости
+- Назначить доменное имя
+- Подключить сертификат
+- Загрузить данные в БД

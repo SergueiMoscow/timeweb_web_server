@@ -6,7 +6,7 @@ services:
     # source: https://nginxproxymanager.com/setup/
     restart: unless-stopped
     ports:
-      - '80:8087'
+      - '80:80'
       - '443:443'
       - '81:81' # Admin Web Port
       # Add any other Stream port you want to expose
@@ -27,6 +27,9 @@ services:
       # https://github.com/portainer/portainer-compose/blob/master/nginx-proxy/docker-compose.yml
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "./vhost.d:/etc/nginx/vhost.d:ro"
+      - /var/www:/media:ro
+    networks:
+      - shared-net
 
   portainer:
     image: portainer/portainer-ce:2.0.0
@@ -35,7 +38,7 @@ services:
     command: --admin-password='$$2y$$05$$YEzn/Y..HER.9EYB8XddtuBUH/gHkfsdYXGQqNHTjStGbIbLBtr1y' -H unix:///var/run/docker.sock
     restart: always
     networks:
-      - proxy
+      - shared-net
     environment:
       - VIRTUAL_HOST=portainer.yourdomain.com
       - VIRTUAL_PORT=9000
@@ -46,7 +49,8 @@ services:
       - portainer_data:/data
 
 networks:
-  proxy:
+  shared-net:
+    external: true
 
 volumes:
   portainer_data:

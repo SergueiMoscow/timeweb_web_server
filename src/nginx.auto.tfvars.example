@@ -1,0 +1,15 @@
+nginx_config = {
+  host         = "<your_host>"
+  forward_host = "<service_name_from_compose.yml>"
+  forward_port = <port>
+  new_email    = "<your_email>"
+  new_password = "<password_for_nginx>"
+  new_username = "<user_name_for_nginx>"
+  new_nickname = "<nickname_for_nginx>"
+
+# There are default values of installed nginx proxy manager
+  current_email    = "admin@example.com"
+  current_password = "changeme"
+  advanced_config = "location /server/path/ { alias /container/path/; }"
+
+}
